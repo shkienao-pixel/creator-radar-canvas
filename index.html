@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#17181c">
+  <meta name="description" content="直接查看 Creator Radar 五阶段工作流，点击节点了解来源、输入输出与处理规则。">
+  <title>Creator Radar · 工作流画布</title>
+  <style>
+:root{color-scheme:dark;--bg:#17181c;--canvas:#131417;--surface:#202126;--surface-raised:#27282e;--border:#3c3d46;--text:#ececf1;--muted:#a5a4b0;--purple:#b8a2ff;--purple-dark:#8262d8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;color:var(--text);background:var(--bg)}*{box-sizing:border-box}body{margin:0;overflow:hidden}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;color:inherit;cursor:pointer}button:disabled{opacity:.3;cursor:default}button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--purple);outline-offset:4px}button{border:0}button svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}button:active:not(:disabled){transform:translateY(1px)}[hidden]{display:none!important}.topbar{height:78px;position:fixed;inset:0 0 auto;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:#1b1c21;border-bottom:1px solid #34353c}.brand{display:flex;gap:12px;align-items:center;min-width:0}.flow-mark{display:grid;place-items:center;width:36px;height:36px;border:1px solid #625184;border-radius:10px;background:#392c51;color:#d0bffb}.flow-mark svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.6}.brand h1{font-size:17px;line-height:1.3;letter-spacing:.1px;margin:0;font-weight:650}.brand-caption{display:block;color:#91909d;font-size:11px;margin-top:3px;letter-spacing:.4px}.topbar-actions{display:flex;gap:24px;align-items:center}.flow-count{font-size:12px;color:var(--muted)}.quiet-button{background:transparent;border:1px solid #484952;border-radius:7px;padding:8px 12px;font-size:12px;white-space:nowrap}.quiet-button:hover:not(:disabled){background:#35353e;border-color:#72707f}.topbar-actions .quiet-button{border-color:#42424d;background:#24252b}#viewport{position:fixed;inset:78px 0 0;overflow:hidden;background-color:var(--canvas);background-image:radial-gradient(#45434d 1px,transparent 1px);background-size:20px 20px;cursor:grab;touch-action:none;outline:0}#viewport.is-panning{cursor:grabbing}#world{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}#nodes,#notes{position:absolute;left:0;top:0}#connections{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}#connections path{fill:none;stroke:#8f899f;stroke-width:2.4;vector-effect:non-scaling-stroke;opacity:.75}#connections path.is-selected{stroke:#bfa1ff;opacity:1}.workflow-node{position:absolute;width:350px;border:1px solid #51505b;background:#24252b;border-radius:12px;box-shadow:0 8px 24px #0002;cursor:default;user-select:none;transition:border-color .12s,box-shadow .12s}.workflow-node:hover{border-color:#8b7aa8;box-shadow:0 10px 30px #0003}.workflow-node.is-selected{border-color:#b294f1;box-shadow:0 0 0 1px #a58ace55,0 12px 32px #0003}.node-header{padding:17px 18px 14px;display:flex;gap:11px;align-items:flex-start;border-bottom:1px solid #3c3d45;min-height:69px;cursor:grab;touch-action:none}.node-header:active{cursor:grabbing}.stage-number{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;color:#d9c8ff;background:#513c73;font-size:13px;font-weight:650;flex-shrink:0;margin-top:1px}.node-header h2{margin:1px 0 0;line-height:1.55;font-weight:600;font-size:17px;letter-spacing:-.15px;overflow-wrap:anywhere}.node-drag-mark{margin-left:auto;color:#757380;font-size:17px;padding-top:2px}.node-description{padding:15px 18px 0;margin:0;color:#c4c2ce;font-size:12px;line-height:1.75;min-height:81px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}.node-input{margin:16px 18px 17px}.field-label{display:block;margin-bottom:9px;font-size:11px;font-weight:500;color:#b1afbe;letter-spacing:.1px}.field-input{display:flex;align-items:center;justify-content:space-between;gap:8px;height:38px;padding:0 11px;border:1px solid #55525e;background:#1e1f24;border-radius:7px;color:#8d8b99;font-size:11px}.field-input svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.5;flex-shrink:0}.guide-button{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 18px 18px;width:calc(100% - 36px);border:1px solid #62566e;border-radius:7px;padding:9px 12px;color:#d4c1ef;background:#332b3f;font-size:12px;font-weight:500}.guide-button:hover{background:#49365d;border-color:#9e83bc}.guide-button svg{width:15px;height:15px}.node-footer{position:relative;border-top:1px solid #3c3d45;padding:13px 18px;text-align:right;border-radius:0 0 12px 12px;color:#a9a6b6;font-size:11px;min-height:43px;background:#222329}.node-port{position:absolute;width:12px;height:12px;border:2px solid #c3aaff;border-radius:50%;background:#7453bd;z-index:2;pointer-events:none}.port-in{left:-7px;top:193px}.port-out{right:-7px;bottom:15px}.node-order{position:absolute;left:4px;top:-28px;font-size:10px;letter-spacing:.8px;color:#87808f;font-weight:500}.note-card{position:absolute;width:350px;min-height:280px;padding:20px 21px 16px;border:1px solid #d1d0d7;border-radius:12px;background:#d8d7de;color:#35323e;box-shadow:0 8px 25px #0001;cursor:pointer;transition:background .12s,border-color .12s}.note-card:hover{background:#e3dfea;border-color:#c7afec}.note-card.is-selected{border-color:#c3a3fa;box-shadow:0 0 0 2px #c1a0f844}.note-card h3{font-size:17px;font-weight:650;margin:0 0 17px;line-height:1.55;letter-spacing:-.25px}.note-card ul{margin:0;padding:0 0 0 17px}.note-card li{font-size:12px;line-height:1.8;padding-left:3px;margin:0 0 12px;overflow-wrap:anywhere}.note-card .note-open{display:block;margin-top:16px;padding-top:12px;border-top:1px solid #bcb8c9;color:#655075;font-size:11px}.status-screen{position:fixed;inset:78px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--canvas);z-index:4;text-align:center;padding:30px;color:var(--muted);gap:12px}.status-screen p{line-height:1.7;font-size:13px;max-width:420px;margin:0}.status-screen h2{font-size:18px;color:var(--text);margin:0}.loading-dot{width:10px;height:10px;border-radius:50%;background:var(--purple);box-shadow:0 0 24px #a58be54a}.error-symbol{display:grid;place-items:center;width:40px;height:40px;border:1px solid #635366;border-radius:50%;color:#d5b3d4;font-size:22px}.primary-button{margin-top:7px;background:#8c6cba;color:white;border-radius:7px;padding:10px 20px}.primary-button:hover{background:#a080cc}.canvas-toolbar{position:fixed;left:24px;right:24px;bottom:max(20px,env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;z-index:5;pointer-events:none}.canvas-hint{font-size:11px;letter-spacing:.1px;color:#888391;border-radius:6px;padding:8px 11px;background:#1c1c22df;border:1px solid #34323c;pointer-events:auto}.zoom-controls{display:flex;align-items:center;gap:3px;padding:4px 6px;background:#26242df5;border:1px solid #514b5d;border-radius:12px;box-shadow:0 4px 18px #0004;pointer-events:auto;flex-shrink:0}.icon-button{display:grid;place-items:center;width:33px;height:33px;border-radius:7px;background:none;color:#b9b3c5;font-size:22px;line-height:1}.icon-button:hover{background:#41374e;color:#e2d3fa}.zoom-value{height:33px;min-width:49px;padding:0 6px;border-radius:7px;background:transparent;font-size:11px;letter-spacing:.1px;color:#c0b8ce}.zoom-value:hover{background:#41374e}.control-divider{display:block;width:1px;height:17px;background:#595260;margin:0 4px}.detail-panel{position:fixed;z-index:8;right:16px;top:94px;bottom:82px;width:min(440px,calc(100vw - 32px));background:#24242b;border:1px solid #57505e;border-radius:15px;box-shadow:0 18px 70px #0008;display:flex;flex-direction:column;overflow:hidden}.detail-header{padding:17px 24px 21px;border-bottom:1px solid #45404b;flex-shrink:0;background:#29262f}.detail-eyebrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.detail-eyebrow>span{color:#b49bd4;font-size:11px;letter-spacing:1px}.detail-eyebrow .icon-button{margin-right:-8px;width:28px;height:28px;font-size:23px}.detail-header h2{font-size:21px;font-weight:620;margin:0;line-height:1.6;letter-spacing:-.4px;overflow-wrap:anywhere}.detail-header p{font-size:12px;line-height:1.8;color:#b7b0c2;margin:11px 0 0}.detail-content{overflow:auto;overscroll-behavior:contain;padding:23px 24px 25px;scrollbar-color:#62586e #24242b;scrollbar-width:thin}.io-section{display:grid;gap:13px;margin:0 0 27px;background:#1d1d24;border:1px solid #44404c;border-radius:9px;padding:15px 16px}.io-row{font-size:12px;line-height:1.7;color:#d8d0e3;overflow-wrap:anywhere}.io-row>span{display:block;color:#8f849e;font-size:10px;letter-spacing:.6px;margin-bottom:3px}.detail-section{margin-bottom:27px}.detail-section:last-child{margin-bottom:0}.detail-section h3{display:flex;align-items:center;gap:8px;font-size:13px;color:#ebe4f6;font-weight:600;margin:0 0 14px;line-height:1.6}.detail-section h3::before{content:"";display:block;width:3px;height:12px;background:#aa8ecf;border-radius:2px;flex-shrink:0}.detail-section ul{margin:0;padding:0 0 0 17px;color:#c2bbcc;font-size:12px;line-height:1.95}.detail-section li{padding-left:3px;margin-bottom:11px}.detail-section li:last-child{margin-bottom:0}.detail-row{font-size:12px;line-height:1.85;color:#c2bbcc;margin-bottom:14px;overflow-wrap:anywhere}.detail-row:last-child{margin-bottom:0}.detail-row strong{display:block;color:#a99ab9;font-weight:500;font-size:11px;margin-bottom:3px}.source-link{display:inline-flex;color:#c0a0f0;border:1px solid #52445f;border-radius:7px;padding:7px 10px;font-size:11px;text-decoration:none;margin-top:3px}.source-link:hover{background:#3d304c}.detail-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #45404b;padding:15px 21px;flex-shrink:0;background:#29262f}.detail-footer>span{font-size:11px;color:#8f849e;white-space:nowrap}.detail-footer .quiet-button{font-size:11px;padding:7px 10px}.drawer-backdrop{position:fixed;inset:78px 0 0;z-index:7;background:#11101466;backdrop-filter:blur(2px)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(min-width:651px){.drawer-backdrop{display:none}}@media(max-width:650px){.topbar{height:68px;padding:0 17px}.brand{gap:9px}.flow-mark{width:31px;height:31px;border-radius:9px}.flow-mark svg{width:22px;height:22px}.brand h1{font-size:15px}.brand-caption{font-size:10px}.topbar-actions{gap:12px}.flow-count{font-size:10px;max-width:70px;text-align:right;line-height:1.6}.topbar-actions .quiet-button{padding:7px 9px;font-size:11px}#viewport,.status-screen{top:68px}.canvas-toolbar{left:14px;right:14px;bottom:max(16px,env(safe-area-inset-bottom));justify-content:flex-end}.canvas-hint{display:none}.detail-panel{inset:80px 10px max(10px,env(safe-area-inset-bottom));width:auto;border-radius:14px;bottom:max(10px,env(safe-area-inset-bottom))}.detail-header{padding:13px 20px 17px}.detail-header h2{font-size:20px}.detail-header p{font-size:12px}.detail-content{padding:21px 20px 22px}.detail-footer{padding:13px 17px}.detail-section ul,.detail-row{font-size:13px}.detail-eyebrow{margin-bottom:6px}.drawer-backdrop{top:68px}.workflow-node{border-width:1.4px}.note-card{border-width:1.4px}}@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+  </style>
+  <!-- 单文件静态画布：样式、交互与节点说明均已内嵌，无需服务器或网络请求。 -->
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="flow-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 7h6m2 0h6M5 17h6m2 0h6M7 9v6m10-6v6"/><rect x="3" y="4" width="6" height="6" rx="2"/><rect x="15" y="14" width="6" height="6" rx="2"/><rect x="15" y="4" width="6" height="6" rx="2"/><rect x="3" y="14" width="6" height="6" rx="2"/></svg></span><div><h1>Creator Radar</h1><span class="brand-caption">静态工作流画布</span></div></div>
+    <div class="topbar-actions"><span id="flow-count" class="flow-count" aria-live="polite">正在打开</span><button id="fit-top" class="quiet-button" type="button" title="适应全图">全图<span aria-hidden="true"> ↗</span></button></div>
+  </header>
+
+  <main id="viewport" aria-label="工作流画布，可拖动和缩放" tabindex="0">
+    <div id="world"><svg id="connections" aria-hidden="true"></svg><div id="nodes"></div><div id="notes"></div></div>
+  </main>
+
+  <section id="loading" class="status-screen" aria-live="polite"><span class="loading-dot" aria-hidden="true"></span><p>正在打开工作流…</p></section>
+  <section id="error-screen" class="status-screen" hidden><span class="error-symbol" aria-hidden="true">!</span><h2>工作流暂未加载</h2><p id="error-message"></p><button id="retry" class="primary-button" type="button">重新加载</button></section>
+
+  <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+  <aside id="details" class="detail-panel" role="dialog" aria-labelledby="detail-title" hidden>
+    <header class="detail-header"><div class="detail-eyebrow"><span id="detail-step">节点说明</span><button id="close-details" class="icon-button" aria-label="关闭节点说明" title="关闭（Esc）" type="button">×</button></div><h2 id="detail-title"></h2><p id="detail-description"></p></header>
+    <div id="detail-content" class="detail-content"></div>
+    <footer class="detail-footer"><button id="previous-node" class="quiet-button" type="button">← 上一步</button><span id="detail-position"></span><button id="next-node" class="quiet-button" type="button">下一步 →</button></footer>
+  </aside>
+
+  <footer class="canvas-toolbar"><span class="canvas-hint">拖动空白平移 · 滚轮缩放 · 点节点看说明</span><div class="zoom-controls" aria-label="画布控制"><button id="zoom-out" class="icon-button" aria-label="缩小" type="button">−</button><button id="zoom-value" class="zoom-value" aria-label="恢复百分之百" type="button">100%</button><button id="zoom-in" class="icon-button" aria-label="放大" type="button">+</button><span class="control-divider"></span><button id="fit" class="icon-button" aria-label="适应全图" title="适应全图" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button></div></footer>
+  <div id="announcement" class="sr-only" aria-live="polite"></div>
+  <script id="workflow-data" type="application/json">{"title":"Creator Radar · 每日阅读","description":"固定6人的五阶段公开原文阅读：帖子每30分钟、长文每日上海08:00；30卡配额、按周归档、收藏保护与90+30天生命周期。每个图节点均核对原文引句和含义。","guideVersion":9,"flowId":"7625dbcf-9d51-417a-b50d-c5ae45b268a9","source":{"flowPath":"flows/creator-radar.json","github":"https://github.com/shkienao-pixel/creator-radar/blob/main/flows/creator-radar.json"},"nodes":[{"id":"RadarStage-collect","stage":"collect","order":1,"name":"① 读取 6 人的公开文章与帖子","description":"直接读取作者官网、官方 Newsletter 与 X 公开页面，不需要采集 Key。保留原始发布日期、原文链接和各来源的可读取情况。","input":"本次阅读任务（自动传入）","output":"任务编号与公开来源统计","position":{"x":0,"y":40},"width":350,"height":320,"guide":{"title":"① 读取 6 人的公开文章与帖子","subtitle":"直接读取作者官网、官方 Newsletter 与 X 公开页面，不需要采集 Key。保留原始发布日期、原文链接和各来源的可读取情况。","accent":205,"chips":[{"label":"固定 6 人","tone":"accent"},{"label":"设置在阅读页统一填写","tone":"muted"}],"sections":[{"heading":"固定读取这 6 位作者","rows":[{"label":"Dan Koe","value":"@thedankoe · https://x.com/thedankoe · 工作与成长"},{"label":"Andrej Karpathy","value":"@karpathy · https://x.com/karpathy · AI"},{"label":"Andrew Huberman","value":"@hubermanlab · https://x.com/hubermanlab · 健康"},{"label":"Sahil Bloom","value":"@SahilBloom · https://x.com/SahilBloom · 工作与成长"},{"label":"James Clear","value":"@JamesClear · https://x.com/JamesClear · 工作与成长"},{"label":"Alex Hormozi","value":"@AlexHormozi · https://x.com/AlexHormozi · 工作与成长"}]},{"heading":"公开来源","rows":[{"label":"Dan Koe","value":"letters.thedankoe.com/feed 与 x.com/thedankoe"},{"label":"Sahil Bloom","value":"sahilbloom.substack.com/feed 与 x.com/SahilBloom"},{"label":"James Clear","value":"jamesclear.com/3-2-1 公开存档与 x.com/JamesClear"},{"label":"Karpathy","value":"karpathy.bearblog.dev 官方博客与 x.com/karpathy"},{"label":"Huberman","value":"hubermanlab.com 公开 Newsletter 与 x.com/hubermanlab"},{"label":"Alex Hormozi","value":"x.com/AlexHormozi 公开原创帖；官网无可核验公开文章时记录不可用"}]},{"heading":"读取规则","items":["各来源取最新可读取内容，按真实发表时间倒序；作者一段时间未发文时，保留其最新原文的实际日期。","X 只提取无需登录页面中实际返回的原创帖与完整长帖；不保证公开页暴露了最新全部时间线。","X读取本页最多100条公开可见原创帖并合并可见自回复串；文章读取近7天最多20篇候选，旧文种子最多2篇且保留真实日期。按链接 / 帖子ID与正文哈希去重。","记录各来源成功、部分可读或受限情况。无法读取时不使用搜索摘要、示例、GitHub技术文档填充。"]},{"heading":"保存与费用","rows":[{"label":"采集","value":"直接公开网页请求，不发送 TwitterAPI.io Key，不调用付费采集接口。"},{"label":"保存","value":"原文、日期、来源与正文哈希保存到本地数据库；缺失部分保留明确状态。"},{"label":"传给下一步","value":"run_id、新增原文数、每位作者与每个公开来源的覆盖记录。"}]}]},"note":"### ① 从公开原文读取\n- Dan Koe · @thedankoe\n- Andrej Karpathy · @karpathy\n- Andrew Huberman · @hubermanlab\n- Sahil Bloom · @SahilBloom\n- James Clear · @JamesClear\n- Alex Hormozi · @AlexHormozi\n\n- 来源：作者官网、官方 Newsletter 与 X 无需登录的公开页面。\n- 范围：X本页最多100条公开可见帖；文章近7天最多20篇候选，旧种子最多2篇且保留原日期。\n- 无需采集 Key：不发送 TwitterAPI.io Key，不调用付费采集接口。\n- 覆盖：公开页可能受限或滞后，记录每个来源的结果，不宣称完整时间线。"},{"id":"RadarStage-enrich","stage":"enrich","order":2,"name":"② 检查公开原文完整性","description":"采集阶段已直接读取全文。本步汇总仍缺正文的条目，不会回退到付费采集接口。","input":"上一步任务与公开来源统计","output":"任务编号与正文完整性统计","position":{"x":410,"y":40},"width":350,"height":320,"guide":{"title":"② 检查公开原文完整性","subtitle":"采集阶段已直接读取全文。本步汇总仍缺正文的条目，不会回退到付费采集接口。","accent":205,"chips":[{"label":"固定 6 人","tone":"accent"},{"label":"设置在阅读页统一填写","tone":"muted"}],"sections":[{"heading":"怎样保留原文","items":["Newsletter 读取完整内容字段，官网读取明确的文章正文区域；保留原始段落、标题、链接、代码与图片。","每篇记录来源、发表日期、取回时间和正文依据。付费预览、截断长帖、缺少原文的页面不标为完整。","不绕过登录、验证码或付费墙，不做音视频转录或图片 OCR。","只有正文完整的实际内容交给模型；未取回的内容留在来源报告中，不虚构替代文章。"]},{"heading":"输出","rows":[{"label":"正文完整","value":"保持原文与来源元数据，交给独立总结、逐段翻译和结构图节点。"},{"label":"仍缺正文","value":"记录待补原因，下轮公开采集再尝试；不触发任何付费采集服务。"}]}]},"note":"### ② 保留完整公开原文\n\n- 读取：RSS / Atom 全文、官网文章正文及 X 页面实际返回的完整原文。\n- 保留：段落、标题、链接、代码、图片与原始日期。\n- 检查：预览、付费墙、截断内容不标完整；不绕过登录、验证码或付费墙。\n- 输出：完整正文交给模型，缺少原文的来源保留失败原因；不回退付费采集。"},{"id":"RadarStage-summarize","stage":"summarize","order":3,"name":"③ 中文总结与逐段翻译","description":"独立读取固定六人最新可读取的完整原文，生成详细中文总结与全文逐段中译。漏段不标完成，成功批次缓存，失败单独补译。","input":"任务编号与正文补全统计","output":"任务编号与文字总结统计","position":{"x":820,"y":40},"width":350,"height":320,"guide":{"title":"③ 中文总结与逐段翻译","subtitle":"独立读取固定六人最新可读取的完整原文，生成详细中文总结与全文逐段中译。漏段不标完成，成功批次缓存，失败单独补译。","accent":205,"chips":[{"label":"固定 6 人","tone":"accent"},{"label":"设置在阅读页统一填写","tone":"muted"}],"sections":[{"heading":"从哪里读、调用谁","rows":[{"label":"输入原文","value":"仅处理主画布入选、收藏、含笔记或已持久排队且正文完整的真实内容；每阶段最多60条，不处理GitHub技术文档。"},{"label":"模型服务","value":"阅读页填写的模型接口地址 + /chat/completions；使用你配置的模型名与模型 Key。"},{"label":"发送内容","value":"原文正文、标题、作者、内容类型与文字总结要求；超过 120,000 字符会报错，不会静默截断。"}]},{"heading":"这一节点负责总结与完整逐段中译","items":["中文标题、一句话主旨、充分中文总结；长文目标300～600字，短帖按原文信息量说明，格言与问题保留原话，不扩写凑字。","核心论点、原文依据与摘录；仅列原文支持的行动建议，健康内容附证据局限。","全文按原始段落编号逐段中译；长文按约5000字符分批，检查段落数量、编号、顺序及英文全文覆盖。漏段或输出截断不会标完成。","校验JSON和原文摘录；这不是独立事实核验或翻译语义质量验收。"]},{"heading":"输出与单独重试","rows":[{"label":"保存结果","value":"总结和 bilingual 英中逐段对照写入 analysis；只有全文对齐才设置 translation_complete，summary_status / summary_error 记录文字及翻译状态。"},{"label":"失败与缓存","value":"成功批次按正文、模型和接口缓存；未完成任务持久排队，跨日继续，额度用完暂停请求并排队，不把待译内容标完成。"},{"label":"连线输出","value":"run_id、summarized（文字成功数）、summary_failed（文字失败数）；下一步仍直接读原文。"}]}]},"note":"### ③ 文字总结独立处理\n\n- 读取：仅入选、收藏、含笔记或持久排队的完整原文，调用已配置模型。\n- 生成：中文标题、一句话主旨、中文总结、论点与依据、行动建议；健康内容附证据局限。\n- 校验：检查字段和原文摘录，不匹配摘录删除并提示。\n- 保存：文字与翻译独立状态；未完成队列跨日保留，额度不足排队，复用成功批次。\n- 原文未变且文字已成功时直接复用。详细规则见「查看本步说明」。"},{"id":"RadarStage-diagram","stage":"diagram","order":4,"name":"④ 独立生成文章结构图","description":"按编号原文生成结构图，每个节点绑定准确引句和段落，再单独核对说法是否由原文支持。点分支直接高亮对应原文；无依据不展示。","input":"任务编号与文字总结统计","output":"任务编号与结构图统计","position":{"x":1230,"y":40},"width":350,"height":320,"guide":{"title":"④ 独立生成文章结构图","subtitle":"按编号原文生成结构图，每个节点绑定准确引句和段落，再单独核对说法是否由原文支持。点分支直接高亮对应原文；无依据不展示。","accent":205,"chips":[{"label":"固定 6 人","tone":"accent"},{"label":"设置在阅读页统一填写","tone":"muted"}],"sections":[{"heading":"这一节点的输入与调用","rows":[{"label":"输入","value":"数据库内完整原文、标题、作者与内容类型；直接分析原文，不依赖文字总结是否成功。"},{"label":"独立请求","value":"向同一个已配置的 /chat/completions 发起另一次模型请求，只要求结构树 JSON。"},{"label":"处理范围","value":"仅处理入选、收藏、含笔记或已持久排队且图尚未成功的完整原文，每阶段最多60条；正文未变且图已核对通过时复用。"}]},{"heading":"具体生成与检查什么","items":["生成 outline：每个中文节点都包含 source_quotes；系统从实际原文推导 paragraph_ids，模型自填编号不能代替校验。","逐节点检查引句真实、定位唯一和正文哈希，再独立检查语义；不能把推荐、赞美、问题或例子扩展成结论。无依据分支不展示。","模型输出结构数据，阅读页按分支关系绘制图，并导出 PNG / SVG；无需额外图片生成 Key。"]},{"heading":"输出与单独重试","rows":[{"label":"保存","value":"analysis.outline 保存节点原文引句和段落号；outline_source_hash 绑定正文，outline_reviewed 记录核对通过。文字结果独立保留。"},{"label":"独立重试","value":"图失败后下次只补图，不重新生成成功的文字；文字失败时图同样可以先完成。"},{"label":"费用","value":"有观点的短文通常为总结含翻译一次、结构图生成一次、原文含义核对一次；长文另需分批翻译。格言与提问按原话呈现，不强行画图。每次真实调用都计额度，默认每日共享100次，失败后复用成功批次。"},{"label":"连线输出","value":"run_id、diagrammed（图成功数）、diagram_failed（图失败数），供最后一步汇总。"}]}]},"note":"### ④ 结构图独立处理\n\n- 读取：再次直接读取原文，不只看上一节点的总结。\n- 生成：每个分支都有原文引句和段落号，少画准确节点，不凑层级。\n- 定位：点击分支显示其原文引句并高亮对应段落；无法核验的分支不展示。可下载 PNG / SVG。\n- 独立重试：画图失败保留文字总结；下次只补失败的图。\n- 结构图生成与原文含义核对是独立模型请求，共用每日调用额度。详细规则见「查看本步说明」。"},{"id":"RadarStage-publish","stage":"publish","order":5,"name":"⑤ 保存结果并更新阅读页","description":"汇总五阶段状态并更新本地画布：今天帖子最多18条、本周长文最多12篇，超额按周归档，收藏与笔记长期保护。运行报告只保存引用，不重复保存全文。","input":"任务编号与结构图统计","output":"任务状态与本地阅读结果","position":{"x":1640,"y":40},"width":350,"height":320,"guide":{"title":"⑤ 保存结果并更新阅读页","subtitle":"汇总五阶段状态并更新本地画布：今天帖子最多18条、本周长文最多12篇，超额按周归档，收藏与笔记长期保护。运行报告只保存引用，不重复保存全文。","accent":205,"chips":[{"label":"固定 6 人","tone":"accent"},{"label":"设置在阅读页统一填写","tone":"muted"}],"sections":[{"heading":"保存到哪里、在哪里看","rows":[{"label":"阅读页","value":"http://localhost:8080 → 今天 / 本周长文 / 归档 / 收藏 / 回收区"},{"label":"数据库","value":"项目目录 data/radar.sqlite：原文、中文总结、结构树和任务记录。"},{"label":"运行快照","value":"data/exports/{run_id}.json：任务报告与条目ID/正文哈希引用，不重复复制原文、译文或结构树。"},{"label":"单篇下载","value":"Markdown、结构树 JSON、结构图 SVG / PNG。"}]},{"heading":"怎么判定是否完成","items":["汇总各作者覆盖、接口错误、正文补全与模型分析结果，记录任务结束时间。","全文逐段翻译和结构图分别记状态；文字完整且图成功或短帖跳过图才整体完成。额度不足保留队列，缺全文或漏译不能标完成。","这里的更新是保存到本地阅读页；没有向 X、邮件、飞书发送，也没有额外合写一篇多作者日报长文。"]},{"heading":"什么时候运行","rows":[{"label":"自动更新","value":"帖子每30分钟检查，官网/RSS每日上海08:00检查；电脑和服务需运行。任务互斥，失败按间隔重试，公开X不保证全量实时。"},{"label":"手动更新","value":"阅读页 → 立即更新；自动创建任务并把 run_id 传入第一个节点。"},{"label":"当前待办","value":"主画布按作者独立配额：今日帖子每人3条、本周长文每人2篇；普通归档90天后进30天可恢复回收区，收藏和笔记不清理。"}]}]},"note":"### ⑤ 保存到哪里、怎么用\n\n- 阅读：[localhost:8080](http://localhost:8080)，今天最多18条帖、本周最多12篇长文，另有归档、收藏与回收区。\n- 留档：原文保存在本地数据库；运行报告只存条目ID和正文哈希引用，不重复全文。\n- 下载：单篇 Markdown、结构数据 JSON、结构图 SVG / PNG。\n- 更新：帖子每30分钟检查、长文每日上海08:00；也可立即更新。普通归档90天后进30天可恢复回收区，收藏和笔记长期保护。\n- 状态：缺页、缺正文或分析失败会显示部分完成。"}],"edges":[{"id":"RadarStage-collect-RadarStage-enrich","source":"RadarStage-collect","target":"RadarStage-enrich"},{"id":"RadarStage-enrich-RadarStage-summarize","source":"RadarStage-enrich","target":"RadarStage-summarize"},{"id":"RadarStage-summarize-RadarStage-diagram","source":"RadarStage-summarize","target":"RadarStage-diagram"},{"id":"RadarStage-diagram-RadarStage-publish","source":"RadarStage-diagram","target":"RadarStage-publish"}],"policies":{"schedule":"帖子每30分钟检查；官网与RSS长文每日北京时间08:00更新。","capacity":"今天帖子每人最多3条，共18条；本周长文每人最多2篇，共12篇。","retention":"普通归档保留90天，再进入30天可恢复回收区；收藏与笔记长期保护。"}}</script>
+  <script>
+(() => {
+  'use strict';
+  const $ = selector => document.querySelector(selector);
+  const viewport = $('#viewport');
+  const world = $('#world');
+  const nodeLayer = $('#nodes');
+  const noteLayer = $('#notes');
+  const edgeLayer = $('#connections');
+  const drawer = $('#details');
+  const mobile = () => matchMedia('(max-width:650px)').matches;
+  const camera = {x:42,y:60,scale:1};
+  const graph = {nodes:[],edges:[],byId:new Map(),positions:new Map(),elements:new Map(),bounds:null,selected:null};
+  let documentData = null;
+  let gesture = null;
+  let suppressClickUntil = 0;
+  let previousFocus = null;
+  let resizeTimer;
+  let loadVersion = 0;
+  let manuallyMoved = false;
+
+  function element(tag,className,text) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text !== undefined) el.textContent = String(text ?? '');
+    return el;
+  }
+  function icon(name) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 24 24');
+    svg.setAttribute('aria-hidden','true');
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d',name === 'book' ? 'M12 5C9 3 5 3 3 4v15c3-1 6-1 9 1m0-15c3-2 7-2 9-1v15c-3-1-6-1-9 1V5' : 'M7 11V7a5 5 0 0 1 10 0v4M5 11h14v11H5z');
+    svg.append(path);
+    return svg;
+  }
+  function safeUrl(value) {
+    try { const u = new URL(value); return ['https:','http:'].includes(u.protocol) ? u.href : null; }
+    catch { return null; }
+  }
+  function cleanName(node) { return String(node.name || node.guide?.title || '工作流节点').replace(/^[①②③④⑤⑥⑦⑧⑨⑩\d\s.、]+/u,'').trim(); }
+  function applyCamera() {
+    world.style.transform = `translate(${camera.x}px,${camera.y}px) scale(${camera.scale})`;
+    viewport.style.backgroundPosition = `${camera.x}px ${camera.y}px`;
+    viewport.style.backgroundSize = `${20 * camera.scale}px ${20 * camera.scale}px`;
+    $('#zoom-value').textContent = `${Math.round(camera.scale * 100)}%`;
+  }
+  function zoom(value,cx=viewport.clientWidth/2,cy=viewport.clientHeight/2) {
+    const next = Math.max(.15,Math.min(1.7,value));
+    const factor = next/camera.scale;
+    camera.x = cx-(cx-camera.x)*factor;
+    camera.y = cy-(cy-camera.y)*factor;
+    camera.scale = next;
+    manuallyMoved = true;
+    applyCamera();
+  }
+  function updateBounds() {
+    const boxes=[];
+    for(const [id,card] of graph.elements) {
+      const p=graph.positions.get(id);
+      if(!p)continue;
+      boxes.push({x:p.x-8,y:p.y,width:card.offsetWidth+16,height:card.offsetHeight});
+      const label=card.querySelector('.node-order');
+      if(label)boxes.push({x:p.x+label.offsetLeft,y:p.y+label.offsetTop,width:label.offsetWidth,height:label.offsetHeight});
+    }
+    for(const card of noteLayer.children)boxes.push({x:card.offsetLeft,y:card.offsetTop,width:card.offsetWidth,height:card.offsetHeight});
+    if(!boxes.length){graph.bounds=null;return}
+    const x=Math.min(...boxes.map(box=>box.x)),y=Math.min(...boxes.map(box=>box.y));
+    const right=Math.max(...boxes.map(box=>box.x+box.width)),bottom=Math.max(...boxes.map(box=>box.y+box.height));
+    graph.bounds={x,y,width:right-x,height:bottom-y};
+    world.style.width=`${Math.max(1,right+80)}px`;world.style.height=`${Math.max(1,bottom+80)}px`;
+  }
+  function fitGraph(initial=false) {
+    updateBounds();
+    if (!graph.bounds) return;
+    const b=graph.bounds, width=viewport.clientWidth, height=viewport.clientHeight;
+    const s=Math.min(1,Math.max(1,width-64)/Math.max(1,b.width),Math.max(1,height-105)/Math.max(1,b.height));
+    camera.scale = initial && mobile() ? Math.max(.72,s) : s;
+    camera.x = initial && mobile() ? 26-b.x*camera.scale : (width-b.width*camera.scale)/2-b.x*camera.scale;
+    camera.y = Math.max(26,(height-58-b.height*camera.scale)/2)-b.y*camera.scale;
+    manuallyMoved = false;
+    applyCamera();
+  }
+  function inputPoint(node) {
+    const p=graph.positions.get(node.id);
+    return {x:p.x,y:p.y+199};
+  }
+  function outputPoint(node) {
+    const p=graph.positions.get(node.id),el=graph.elements.get(node.id);
+    return {x:p.x+350,y:p.y+el.offsetHeight-21};
+  }
+  function renderEdges() {
+    edgeLayer.replaceChildren();
+    for (const edge of graph.edges) {
+      const a=outputPoint(graph.byId.get(edge.source)),b=inputPoint(graph.byId.get(edge.target));
+      const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+      const bend=Math.max(28,Math.abs(b.x-a.x)*.55);
+      path.setAttribute('d',`M${a.x} ${a.y} C${a.x+bend} ${a.y},${b.x-bend} ${b.y},${b.x} ${b.y}`);
+      if (edge.source===graph.selected || edge.target===graph.selected) path.classList.add('is-selected');
+      edgeLayer.append(path);
+    }
+  }
+  function summaryLines(node) {
+    const lines=[];
+    for (const section of node.guide?.sections || []) {
+      for (const row of section.rows || []) {
+        if (lines.length >= 3) return lines;
+        lines.push(`${row.label || section.heading}：${row.value || ''}`);
+      }
+      for (const item of section.items || []) {
+        if (lines.length >= 3) return lines;
+        lines.push(String(item));
+      }
+    }
+    if (!lines.length) lines.push(node.description || '点击查看本节点的处理说明。');
+    return lines;
+  }
+  function openOnKeyboard(event,node) {
+    if (event.target===event.currentTarget && ['Enter',' '].includes(event.key)) {
+      event.preventDefault(); openNode(node.id);
+    }
+  }
+  function renderNode(node,index) {
+    const p=graph.positions.get(node.id);
+    const card=element('article','workflow-node');
+    card.tabIndex=0;
+    card.setAttribute('aria-label',`${index+1} ${cleanName(node)}，点击查看节点说明`);
+    card.style.left=`${p.x}px`;card.style.top=`${p.y}px`;
+    card.dataset.nodeId=node.id;
+    card.append(element('span','node-order',`STEP ${String(index+1).padStart(2,'0')}`));
+    const header=element('header','node-header');
+    header.append(element('span','stage-number',index+1),element('h2','',cleanName(node)),element('span','node-drag-mark','⠿'));
+    header.setAttribute('title','拖动标题移动节点');
+    card.append(header,element('p','node-description',node.description || node.guide?.subtitle || ''));
+    const input=element('div','node-input');
+    input.append(element('span','field-label',node.input || '上一步任务'));
+    const value=element('div','field-input');value.append(element('span','',index===0?'阅读页或定时器自动传入':'接收上一步任务'),icon('lock'));input.append(value);card.append(input);
+    const guide=element('button','guide-button');guide.type='button';guide.append(icon('book'),element('span','','查看本步说明'));guide.setAttribute('aria-label',`查看第 ${index+1} 步：${cleanName(node)}的说明`);card.append(guide);
+    const footer=element('footer','node-footer',node.output || '传递任务与处理结果');
+    const out=element('span','node-port port-out');out.setAttribute('aria-hidden','true');footer.append(out);card.append(footer);
+    if(index>0){const incoming=element('span','node-port port-in');incoming.setAttribute('aria-hidden','true');card.append(incoming)}
+    card.addEventListener('click',()=>{if(Date.now()>suppressClickUntil)openNode(node.id)});
+    card.addEventListener('keydown',event=>openOnKeyboard(event,node));
+    header.addEventListener('pointerdown',event=>startNodeDrag(event,node));
+    nodeLayer.append(card);graph.elements.set(node.id,card);
+    return card;
+  }
+  function renderNote(node,index,top) {
+    const p=graph.positions.get(node.id);
+    const card=element('article','note-card');card.style.left=`${p.x}px`;card.style.top=`${top}px`;card.tabIndex=0;card.dataset.noteId=node.id;
+    card.setAttribute('aria-label',`${index+1} ${cleanName(node)}的说明卡，点击查看完整说明`);
+    card.append(element('h3','',`${index+1}　${cleanName(node)}`));
+    const list=element('ul');
+    for(const line of summaryLines(node))list.append(element('li','',line));
+    card.append(list,element('span','note-open','点击查看完整说明 ↗'));
+    card.addEventListener('click',()=>{if(Date.now()>suppressClickUntil)openNode(node.id)});
+    card.addEventListener('keydown',event=>openOnKeyboard(event,node));noteLayer.append(card);
+    return card;
+  }
+  function renderGraph() {
+    nodeLayer.replaceChildren();noteLayer.replaceChildren();graph.elements.clear();graph.positions.clear();
+    graph.nodes.forEach((node,index)=>{const raw=node.position || {};graph.positions.set(node.id,{x:Number.isFinite(raw.x)?raw.x:index*410,y:Number.isFinite(raw.y)?raw.y:40});renderNode(node,index)});
+    const noteTop=Math.max(...graph.nodes.map(node=>graph.positions.get(node.id).y+graph.elements.get(node.id).offsetHeight))+64;
+    graph.nodes.forEach((node,index)=>renderNote(node,index,noteTop));
+    renderEdges();fitGraph(true);
+  }
+  function renderSection(section) {
+    const box=element('section','detail-section');box.append(element('h3','',section.heading || '处理说明'));
+    for(const row of section.rows || []){const value=element('div','detail-row');value.append(element('strong','',row.label || ''),element('div','',row.value || ''));box.append(value)}
+    if(section.items?.length){const list=element('ul');for(const item of section.items)list.append(element('li','',item));box.append(list)}
+    return box;
+  }
+  function openNode(id) {
+    const node=graph.byId.get(id);if(!node)return;
+    const index=graph.nodes.indexOf(node);
+    if(drawer.hidden)previousFocus=document.activeElement;
+    graph.selected=id;
+    $('#detail-step').textContent=`STEP ${String(index+1).padStart(2,'0')} · 节点说明`;
+    $('#detail-title').textContent=cleanName(node);
+    $('#detail-description').textContent=node.guide?.subtitle || node.description || '';
+    const content=$('#detail-content');content.replaceChildren();content.scrollTop=0;
+    const io=element('section','io-section');
+    for(const [label,value] of [['输入',node.input],['输出',node.output]]){const row=element('div','io-row');row.append(element('span','',label),element('div','',value || '未提供'));io.append(row)}
+    content.append(io);
+    for(const section of node.guide?.sections || [])content.append(renderSection(section));
+    const source=safeUrl(documentData.source?.github);
+    if(source){const link=element('a','source-link','查看工作流源码 ↗');link.href=source;link.target='_blank';link.rel='noopener noreferrer';content.append(link)}
+    $('#detail-position').textContent=`${index+1} / ${graph.nodes.length}`;
+    $('#previous-node').disabled=index===0;$('#next-node').disabled=index===graph.nodes.length-1;
+    for(const [key,card] of graph.elements)card.classList.toggle('is-selected',key===id);
+    noteLayer.querySelectorAll('[data-note-id]').forEach(card=>card.classList.toggle('is-selected',card.dataset.noteId===id));
+    drawer.hidden=false;drawer.setAttribute('aria-modal',String(mobile()));$('#drawer-backdrop').hidden=!mobile();renderEdges();
+    $('#close-details').focus({preventScroll:true});$('#announcement').textContent=`已打开第 ${index+1} 步：${cleanName(node)}`;
+  }
+  function closeDetails() {
+    drawer.hidden=true;$('#drawer-backdrop').hidden=true;graph.selected=null;
+    for(const card of graph.elements.values())card.classList.remove('is-selected');
+    noteLayer.querySelectorAll('.is-selected').forEach(card=>card.classList.remove('is-selected'));renderEdges();
+    if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});
+  }
+  function navigateNode(direction) {
+    const index=graph.nodes.findIndex(node=>node.id===graph.selected),node=graph.nodes[index+direction];
+    if(node)openNode(node.id);
+  }
+  function startNodeDrag(event,node) {
+    if(event.button!==0)return;
+    event.preventDefault();event.stopPropagation();
+    const p=graph.positions.get(node.id);
+    gesture={kind:'node',id:event.pointerId,startX:event.clientX,startY:event.clientY,x:p.x,y:p.y,node,moved:false};
+    viewport.setPointerCapture(event.pointerId);
+  }
+  viewport.addEventListener('pointerdown',event=>{
+    if(event.button!==0 || event.target.closest('button,a,.workflow-node,.note-card'))return;
+    event.preventDefault();gesture={kind:'pan',id:event.pointerId,startX:event.clientX,startY:event.clientY,x:camera.x,y:camera.y,moved:false};viewport.setPointerCapture(event.pointerId);viewport.classList.add('is-panning');
+  });
+  viewport.addEventListener('pointermove',event=>{
+    if(!gesture || gesture.id!==event.pointerId)return;
+    const dx=event.clientX-gesture.startX,dy=event.clientY-gesture.startY;
+    if(Math.hypot(dx,dy)>4)gesture.moved=true;
+    if(!gesture.moved)return;
+    manuallyMoved=true;
+    if(gesture.kind==='pan'){camera.x=gesture.x+dx;camera.y=gesture.y+dy;applyCamera()}
+    else{const p=graph.positions.get(gesture.node.id),card=graph.elements.get(gesture.node.id);p.x=gesture.x+dx/camera.scale;p.y=gesture.y+dy/camera.scale;card.style.left=`${p.x}px`;card.style.top=`${p.y}px`;renderEdges()}
+  });
+  function endGesture(event) {
+    if(!gesture || gesture.id!==event.pointerId)return;
+    const current=gesture;gesture=null;viewport.classList.remove('is-panning');
+    if(viewport.hasPointerCapture(event.pointerId))viewport.releasePointerCapture(event.pointerId);
+    if(current.moved)suppressClickUntil=Date.now()+180;
+    else if(current.kind==='node' && event.type==='pointerup'){suppressClickUntil=Date.now()+180;openNode(current.node.id)}
+  }
+  viewport.addEventListener('pointerup',endGesture);viewport.addEventListener('pointercancel',endGesture);
+  viewport.addEventListener('wheel',event=>{
+    event.preventDefault();
+    const bounds=viewport.getBoundingClientRect();
+    if(event.shiftKey){camera.x-=event.deltaY;camera.y-=event.deltaX;manuallyMoved=true;applyCamera()}
+    else zoom(camera.scale*Math.exp(-event.deltaY*.0025),event.clientX-bounds.left,event.clientY-bounds.top);
+  },{passive:false});
+  viewport.addEventListener('keydown',event=>{
+    if(event.target!==viewport)return;
+    if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)){event.preventDefault();camera.x+=event.key==='ArrowLeft'?64:event.key==='ArrowRight'?-64:0;camera.y+=event.key==='ArrowUp'?64:event.key==='ArrowDown'?-64:0;manuallyMoved=true;applyCamera()}
+    if(['+','=','-','0','f'].includes(event.key)){event.preventDefault();if(event.key==='0'||event.key==='f')fitGraph();else zoom(camera.scale*(event.key==='-'?1/1.15:1.15))}
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&!drawer.hidden){event.preventDefault();closeDetails()}
+    if(event.key==='Tab'&&!drawer.hidden&&mobile()){
+      const controls=[...drawer.querySelectorAll('button:not(:disabled),a[href]')];
+      const first=controls[0],last=controls[controls.length-1];
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+    }
+  });
+  $('#close-details').addEventListener('click',closeDetails);$('#drawer-backdrop').addEventListener('click',closeDetails);
+  $('#previous-node').addEventListener('click',()=>navigateNode(-1));$('#next-node').addEventListener('click',()=>navigateNode(1));
+  $('#fit').addEventListener('click',()=>fitGraph());$('#fit-top').addEventListener('click',()=>fitGraph());
+  $('#zoom-in').addEventListener('click',()=>zoom(camera.scale*1.18));$('#zoom-out').addEventListener('click',()=>zoom(camera.scale/1.18));$('#zoom-value').addEventListener('click',()=>zoom(1));
+  $('#retry').addEventListener('click',load);
+  addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(graph.bounds&&!manuallyMoved)fitGraph(true);if(!drawer.hidden){drawer.setAttribute('aria-modal',String(mobile()));$('#drawer-backdrop').hidden=!mobile()}},120)});
+
+  async function load() {
+    const version=++loadVersion;$('#loading').hidden=false;$('#error-screen').hidden=true;
+    try{
+      const data=JSON.parse(document.getElementById('workflow-data').textContent);
+      if(version!==loadVersion)return;
+      if(!Array.isArray(data.nodes)||!data.nodes.length||data.nodes.length>100||!Array.isArray(data.edges))throw Error('工作流数据暂不完整。');
+      const ids=new Set(data.nodes.map(node=>node.id));if(ids.size!==data.nodes.length||data.edges.some(edge=>!ids.has(edge.source)||!ids.has(edge.target)))throw Error('工作流连线暂不完整。');
+      documentData=data;graph.nodes=[...data.nodes].sort((a,b)=>(a.order??0)-(b.order??0));graph.edges=data.edges;graph.byId=new Map(graph.nodes.map(node=>[node.id,node]));
+      $('#flow-count').textContent=`${graph.nodes.length} 节点 · ${graph.edges.length} 连线`;
+      renderGraph();$('#loading').hidden=true;
+    }catch(error){if(version!==loadVersion)return;$('#loading').hidden=true;$('#error-screen').hidden=false;$('#error-message').textContent=error.message||'请刷新页面后再试。';$('#flow-count').textContent='暂未加载'}
+  }
+  load();
+})();
+
+  </script>
+</body>
+</html>
